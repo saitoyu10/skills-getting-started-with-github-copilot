@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+uvicorn src.main:app --reloaddocument.addEventListener("DOMContentLoaded", () => {
   const activitiesList = document.getElementById("activities-list");
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
@@ -20,11 +20,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
+        // 参加者リストを生成
+        let participantsHTML = "";
+        if (details.participants.length > 0) {
+          participantsHTML = `
+            <ul class="participants-list">
+              ${details.participants.map(p => `<li>${p}</li>`).join("")}
+            </ul>
+          `;
+        } else {
+          participantsHTML = `<div class="participants-list none">No participants yet.</div>`;
+        }
+
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <div class="participants-section">
+            <strong>Participants:</strong>
+            ${participantsHTML}
+          </div>
         `;
 
         activitiesList.appendChild(activityCard);
